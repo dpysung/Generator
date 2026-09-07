@@ -303,80 +303,161 @@
           </div>
         </div>
 
-        <!-- Tab 2 Content: Room Finishes (Wall & Floor) -->
+        <!-- Tab 2 Content: Room Finishes (Brand Collections) -->
         <div id="tab-finishes" class="tab-content">
-          <!-- Floor Finishes Section -->
+          <!-- Construction Target Room Selector -->
           <section class="finish-section">
             <h3 class="section-title">
-              <span class="title-icon">🪵</span> 바닥재 선택 (Floor Texture)
+              <span class="title-icon">🎯</span> 시공 대상 공간 선택
             </h3>
-            <p class="section-desc">공간 분위기에 맞는 고해상도 바닥재를 적용해보세요.</p>
+            <p class="section-desc">바닥재를 전체에 적용하거나, 특정 방에만 부분 시공할 수 있습니다.</p>
+            <div class="room-pills" id="finish-target-pills">
+              <button class="room-pill active" data-target="all">전체 일괄 시공</button>
+              <button class="room-pill" data-target="living">거실/침실</button>
+              <button class="room-pill" data-target="bedroom">침실</button>
+              <button class="room-pill" data-target="kitchen">주방</button>
+              <button class="room-pill" data-target="bathroom">욕실</button>
+              <button class="room-pill" data-target="balcony">발코니</button>
+            </div>
+          </section>
+
+          <!-- Brand Floor Finishes Section -->
+          <section class="finish-section">
+            <h3 class="section-title">
+              <span class="title-icon">🪵</span> 브랜드 바닥재 컬렉션 (Flooring)
+            </h3>
+            <p class="section-desc">LX Z:IN, 동화자연마루, KCC, 현대L&C의 베스트셀러 바닥재입니다.</p>
+            
             <div class="finish-options-grid" id="floor-options">
-              <div class="finish-card active" data-floor="wood">
-                <div class="finish-preview floor-preview-wood"></div>
+              <!-- 1. Dongwha Grande Sahara Light -->
+              <div class="finish-card active" data-floor="dongwha_grande">
+                <div class="finish-preview floor-preview-dongwha-grande"></div>
                 <div class="finish-info">
-                  <span class="finish-name">내추럴 오크 마루</span>
-                  <span class="finish-type">Hardwood Plank</span>
+                  <span class="brand-badge badge-dongwha">동화자연마루</span>
+                  <span class="finish-name">나투스진 그란데 [사하라 라이트]</span>
+                  <span class="finish-type">광폭 석재 패턴 강마루 (인기 1위)</span>
                 </div>
               </div>
-              <div class="finish-card" data-floor="marble">
-                <div class="finish-preview floor-preview-marble"></div>
+
+              <!-- 2. LX Z:IN Zia Natural Oak -->
+              <div class="finish-card" data-floor="lx_oak">
+                <div class="finish-preview floor-preview-lx-oak"></div>
                 <div class="finish-info">
-                  <span class="finish-name">비앙코 카라라 대리석</span>
-                  <span class="finish-type">White Carrara</span>
+                  <span class="brand-badge badge-lx">LX하우시스 Z:IN</span>
+                  <span class="finish-name">지아자연애 2.2T [소프트 오크]</span>
+                  <span class="finish-type">친환경 내추럴 원목 우드 시트</span>
                 </div>
               </div>
-              <div class="finish-card" data-floor="tile">
-                <div class="finish-preview floor-preview-tile"></div>
+
+              <!-- 3. Dongwha Herringbone -->
+              <div class="finish-card" data-floor="dongwha_herringbone">
+                <div class="finish-preview floor-preview-dongwha-herringbone"></div>
                 <div class="finish-info">
-                  <span class="finish-name">모던 그레이 타일</span>
-                  <span class="finish-type">Ceramic Grid</span>
+                  <span class="brand-badge badge-dongwha">동화자연마루</span>
+                  <span class="finish-name">나투스진 [골든 티크 헤링본]</span>
+                  <span class="finish-type">클래식 헤링본 V자 패턴 원목 마루</span>
                 </div>
               </div>
-              <div class="finish-card" data-floor="concrete">
-                <div class="finish-preview floor-preview-concrete"></div>
+
+              <!-- 4. LX Z:IN Zia Sorizam Bianco -->
+              <div class="finish-card" data-floor="lx_marble">
+                <div class="finish-preview floor-preview-lx-marble"></div>
                 <div class="finish-info">
-                  <span class="finish-name">에폭시 콘크리트</span>
-                  <span class="finish-type">Industrial Matte</span>
+                  <span class="brand-badge badge-lx">LX하우시스 Z:IN</span>
+                  <span class="finish-name">지아소리잠 4.5T [비앙코 마블]</span>
+                  <span class="finish-type">프리미엄 600角 대리석 타일 시트</span>
+                </div>
+              </div>
+
+              <!-- 5. KCC HomeCC Terrazzo -->
+              <div class="finish-card" data-floor="kcc_terrazzo">
+                <div class="finish-preview floor-preview-kcc-terrazzo"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-kcc">KCC 글라스</span>
+                  <span class="finish-name">홈씨씨 숲 [테라조 그레이 타일]</span>
+                  <span class="finish-type">이탈리안 감성 테라조 스톤</span>
+                </div>
+              </div>
+
+              <!-- 6. Hyundai L&C Concrete -->
+              <div class="finish-card" data-floor="hyundai_concrete">
+                <div class="finish-preview floor-preview-hyundai-concrete"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-hyundai">현대 L&C</span>
+                  <span class="finish-name">소리지움 4.5T [어반 콘크리트]</span>
+                  <span class="finish-type">인더스트리얼 노출 콘크리트 마감</span>
                 </div>
               </div>
             </div>
           </section>
 
-          <!-- Wall Customization Section -->
+          <!-- Brand Wallcoverings Section -->
           <section class="finish-section">
             <h3 class="section-title">
-              <span class="title-icon">🎨</span> 벽지 색상 & 패턴 (Walls)
+              <span class="title-icon">🎨</span> 브랜드 실크 벽지 컬렉션 (Wallpapers)
             </h3>
-            <p class="section-desc">3개 벽면의 컬러와 텍스처를 손쉽게 변경할 수 있습니다.</p>
+            <p class="section-desc">LX 디아망, 베스띠, 신한벽지, 개나리벽지 프리미엄 라인업입니다.</p>
             
-            <div class="color-palette-grid" id="wall-color-palette">
-              <button class="color-swatch active" data-color="#f4efe6" title="웜 크림 베이지" style="background: #f4efe6;"></button>
-              <button class="color-swatch" data-color="#e2e8f0" title="모던 소프트 그레이" style="background: #e2e8f0;"></button>
-              <button class="color-swatch" data-color="#2d3748" title="다크 차콜 네이비" style="background: #2d3748;"></button>
-              <button class="color-swatch" data-color="#dce7e1" title="세이지 그린" style="background: #dce7e1;"></button>
-              <button class="color-swatch" data-color="#ebd8d0" title="테라코타 파스텔" style="background: #ebd8d0;"></button>
-              <button class="color-swatch" data-color="#1e293b" title="미드나잇 슬레이트" style="background: #1e293b;"></button>
-            </div>
-
-            <div class="finish-sub-options">
-              <label class="control-label">벽면 패턴</label>
-              <div class="select-wrapper">
-                <select id="wall-pattern-select">
-                  <option value="clean">클린 매트 (Clean Solid)</option>
-                  <option value="linen">소프트 린넨 (Textured Linen)</option>
-                  <option value="stripe">버티컬 스트라이프 (Pinstripe)</option>
-                </select>
+            <div class="finish-options-grid" id="wall-options">
+              <!-- 1. LX Diamant Handy Clay Warm White -->
+              <div class="finish-card active" data-wall="lx_diamant_white">
+                <div class="finish-preview wall-preview-lx-diamant"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-lx">LX하우시스 Z:IN</span>
+                  <span class="finish-name">디아망 [핸디크레이 웜화이트]</span>
+                  <span class="finish-type">프리미엄 회벽 질감 실크벽지</span>
+                </div>
               </div>
-            </div>
 
-            <!-- Wall Visibility Toggle -->
-            <div class="wall-toggle-row">
-              <label class="checkbox-container">
-                <input type="checkbox" id="chk-toggle-side-walls" checked>
-                <span class="checkmark"></span>
-                <span>좌/우 측면 벽면 표시</span>
-              </label>
+              <!-- 2. Shinhan Sketch Sand Beige -->
+              <div class="finish-card" data-wall="shinhan_sand_beige">
+                <div class="finish-preview wall-preview-shinhan-sand"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-shinhan">신한벽지</span>
+                  <span class="finish-name">스케치 [소프트 샌드 베이지]</span>
+                  <span class="finish-type">아늑한 웜톤 페인팅 텍스처</span>
+                </div>
+              </div>
+
+              <!-- 3. LX Besti Modern Cotton Gray -->
+              <div class="finish-card" data-wall="lx_besti_gray">
+                <div class="finish-preview wall-preview-lx-besti"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-lx">LX하우시스 Z:IN</span>
+                  <span class="finish-name">베스띠 [모던 코튼 그레이]</span>
+                  <span class="finish-type">포근한 패브릭 직물 린넨 벽지</span>
+                </div>
+              </div>
+
+              <!-- 4. LX Zia Sage Green -->
+              <div class="finish-card" data-wall="lx_sage_green">
+                <div class="finish-preview wall-preview-lx-sage"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-lx">LX하우시스 Z:IN</span>
+                  <span class="finish-name">지아패브릭 [보태니컬 세이지그린]</span>
+                  <span class="finish-type">친환경 옥수수 코팅 뮤트 그린</span>
+                </div>
+              </div>
+
+              <!-- 5. Shinhan Midnight Navy -->
+              <div class="finish-card" data-wall="shinhan_navy">
+                <div class="finish-preview wall-preview-shinhan-navy"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-shinhan">신한벽지</span>
+                  <span class="finish-name">에센스 [미드나잇 딥네이비]</span>
+                  <span class="finish-type">호텔 인테리어 포인트 아트월</span>
+                </div>
+              </div>
+
+              <!-- 6. Gaenari Vertical Pinstripe -->
+              <div class="finish-card" data-wall="gaenari_stripe">
+                <div class="finish-preview wall-preview-gaenari-stripe"></div>
+                <div class="finish-info">
+                  <span class="brand-badge badge-gaenari">개나리벽지</span>
+                  <span class="finish-name">로하스 [버티컬 핀스트라이프]</span>
+                  <span class="finish-type">단정하고 세련된 스트라이프</span>
+                </div>
+              </div>
             </div>
           </section>
         </div>

@@ -654,28 +654,93 @@ button, input, select {
 }
 
 .finish-preview {
-  height: 48px;
+  height: 52px;
   width: 100%;
+  position: relative;
 }
 
-.floor-preview-wood {
-  background: repeating-linear-gradient(90deg, #9c6644, #9c6644 14px, #7f4f24 15px);
+/* Brand Badges */
+.brand-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  letter-spacing: -0.2px;
 }
+.badge-dongwha { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.badge-lx { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.badge-kcc { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.badge-hyundai { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-shinhan { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+.badge-gaenari { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
 
-.floor-preview-marble {
-  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 50%, #94a3b8 100%);
-}
-
-.floor-preview-tile {
+/* Brand Floor Previews */
+.floor-preview-dongwha-grande {
   background: 
-    linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px),
-    #475569;
-  background-size: 12px 12px;
+    linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px),
+    #d8d3cd;
+  background-size: 32px 18px;
 }
 
-.floor-preview-concrete {
-  background: radial-gradient(circle, #64748b 20%, #334155 100%);
+.floor-preview-lx-oak {
+  background: repeating-linear-gradient(90deg, #b08968, #b08968 12px, #9c6644 13px);
+}
+
+.floor-preview-dongwha-herringbone {
+  background: 
+    repeating-linear-gradient(45deg, #a47148, #a47148 6px, #7f4f24 7px, #7f4f24 12px),
+    repeating-linear-gradient(-45deg, #b08968, #b08968 6px, #8d5b4c 7px, #8d5b4c 12px);
+  background-blend-mode: multiply;
+}
+
+.floor-preview-lx-marble {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 40%, #cbd5e1 100%);
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.floor-preview-kcc-terrazzo {
+  background: 
+    radial-gradient(circle, #334155 10%, transparent 15%),
+    radial-gradient(circle, #cbd5e1 15%, transparent 20%),
+    #94a3b8;
+  background-size: 14px 14px, 20px 20px;
+}
+
+.floor-preview-hyundai-concrete {
+  background: radial-gradient(circle, #64748b 20%, #475569 100%);
+}
+
+/* Brand Wallpaper Previews */
+.wall-preview-lx-diamant {
+  background: #fbf9f5;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.wall-preview-shinhan-sand {
+  background: #ede6dc;
+}
+
+.wall-preview-lx-besti {
+  background: 
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px),
+    #dde1e6;
+  background-size: 4px 4px;
+}
+
+.wall-preview-lx-sage {
+  background: #cbdad0;
+}
+
+.wall-preview-shinhan-navy {
+  background: #1e293b;
+}
+
+.wall-preview-gaenari-stripe {
+  background: repeating-linear-gradient(90deg, #f5f0e8, #f5f0e8 8px, #e8dfd3 9px);
 }
 
 .finish-info {
@@ -684,9 +749,10 @@ button, input, select {
 
 .finish-name {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   display: block;
   color: #f1f5f9;
+  line-height: 1.3;
 }
 
 .finish-type {
