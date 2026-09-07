@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Interior Space Simulator - 홈 인테리어 3D 시뮬레이터</title>
+  <meta name="description" content="Vanilla JS와 Three.js 기반의 고성능 3D 홈 인테리어 시뮬레이터. 실제 가구 배치, 벽지/바닥재 교체, 조명 시뮬레이션 지원">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Three.js r128 CDN & OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app">
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-section">
+        <div class="logo-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>RoomCraft <span>3D Studio</span></h1>
+          <span class="subtitle">Next-Gen Interior Simulator</span>
+        </div>
+      </div>
+
+      <!-- Room Stats Bar -->
+      <div class="room-stats-bar">
+        <div class="stat-badge" title="방 기본 크기 (가로 x 세로)">
+          <span class="stat-label">공간 크기</span>
+          <span class="stat-value">10m × 8m</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-badge" title="배치된 가구/소품 수">
+          <span class="stat-label">배치된 아이템</span>
+          <span class="stat-value" id="placed-items-count">0개</span>
+        </div>
+      </div>
+
+      <!-- Quick Control Tools -->
+      <div class="toolbar-actions">
+        <!-- Camera View Presets -->
+        <div class="btn-group view-presets" role="group" aria-label="카메라 뷰 전환">
+          <button id="btn-view-iso" class="tool-btn active" title="3D 원근 뷰 (Isometric Perspective)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span>3D 뷰</span>
+          </button>
+          <button id="btn-view-top" class="tool-btn" title="2D 탑뷰 평면도 (Top-down Plan)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            <span>2D 평면도</span>
+          </button>
+          <button id="btn-view-eye" class="tool-btn" title="실내 눈높이 뷰 (Eye-level View)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span>실내 시선</span>
+          </button>
+        </div>
+
+        <div class="stat-divider"></div>
+
+        <!-- Lighting Toggle (Day/Night) -->
+        <button id="btn-toggle-light" class="tool-btn toggle-btn" title="주간 자연광 / 야간 무드등 전환">
+          <span class="icon sun-icon">☀️</span>
+          <span class="btn-text">주간 모드</span>
+        </button>
+
+        <!-- Grid Toggle -->
+        <button id="btn-toggle-grid" class="tool-btn icon-only active" title="바닥 격자 그리드 켜기/끄기">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </button>
+
+        <!-- Reset Camera -->
+        <button id="btn-reset-cam" class="tool-btn icon-only" title="카메라 위치 초기화">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+        </button>
+
+        <div class="stat-divider"></div>
+
+        <!-- Save & Load Plan -->
+        <button id="btn-save-plan" class="tool-btn action-btn-subtle" title="현재 배치 브라우저에 저장">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          <span>저장</span>
+        </button>
+        <button id="btn-clear-scene" class="tool-btn action-btn-danger" title="모든 가구 비우기">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>초기화</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-workspace">
+      <!-- Left Control Panel (Sidebar) -->
+      <aside class="sidebar-panel glass-card">
+        <!-- Tab Headers -->
+        <nav class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="catalog">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+            <span>가구/가전</span>
+          </button>
+          <button class="tab-btn" data-tab="finishes">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+            <span>벽지/바닥재</span>
+          </button>
+          <button class="tab-btn" data-tab="layers">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>배치 목록</span>
+          </button>
+        </nav>
+
+        <!-- Tab 1 Content: Furniture Catalog -->
+        <div id="tab-catalog" class="tab-content active">
+          <!-- Category Filter Chips -->
+          <div class="category-filters">
+            <button class="filter-chip active" data-category="all">전체</button>
+            <button class="filter-chip" data-category="living">거실</button>
+            <button class="filter-chip" data-category="bedroom">침실</button>
+            <button class="filter-chip" data-category="kitchen">주방/가전</button>
+            <button class="filter-chip" data-category="decor">데코/조명</button>
+          </div>
+
+          <!-- Catalog Item Cards Grid -->
+          <div class="catalog-grid" id="catalog-grid">
+            <!-- Catalog cards populated by app.js -->
+          </div>
+          
+          <div class="catalog-tip">
+            💡 아이템을 클릭하면 방 중앙에 즉시 배치되며, 마우스 드래그로 바닥 어디든 옮길 수 있습니다.
+          </div>
+        </div>
+
+        <!-- Tab 2 Content: Room Finishes (Wall & Floor) -->
+        <div id="tab-finishes" class="tab-content">
+          <!-- Floor Finishes Section -->
+          <section class="finish-section">
+            <h3 class="section-title">
+              <span class="title-icon">🪵</span> 바닥재 선택 (Floor Texture)
+            </h3>
+            <p class="section-desc">공간 분위기에 맞는 고해상도 바닥재를 적용해보세요.</p>
+            <div class="finish-options-grid" id="floor-options">
+              <div class="finish-card active" data-floor="wood">
+                <div class="finish-preview floor-preview-wood"></div>
+                <div class="finish-info">
+                  <span class="finish-name">내추럴 오크 마루</span>
+                  <span class="finish-type">Hardwood Plank</span>
+                </div>
+              </div>
+              <div class="finish-card" data-floor="marble">
+                <div class="finish-preview floor-preview-marble"></div>
+                <div class="finish-info">
+                  <span class="finish-name">비앙코 카라라 대리석</span>
+                  <span class="finish-type">White Carrara</span>
+                </div>
+              </div>
+              <div class="finish-card" data-floor="tile">
+                <div class="finish-preview floor-preview-tile"></div>
+                <div class="finish-info">
+                  <span class="finish-name">모던 그레이 타일</span>
+                  <span class="finish-type">Ceramic Grid</span>
+                </div>
+              </div>
+              <div class="finish-card" data-floor="concrete">
+                <div class="finish-preview floor-preview-concrete"></div>
+                <div class="finish-info">
+                  <span class="finish-name">에폭시 콘크리트</span>
+                  <span class="finish-type">Industrial Matte</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Wall Customization Section -->
+          <section class="finish-section">
+            <h3 class="section-title">
+              <span class="title-icon">🎨</span> 벽지 색상 & 패턴 (Walls)
+            </h3>
+            <p class="section-desc">3개 벽면의 컬러와 텍스처를 손쉽게 변경할 수 있습니다.</p>
+            
+            <div class="color-palette-grid" id="wall-color-palette">
+              <button class="color-swatch active" data-color="#f4efe6" title="웜 크림 베이지" style="background: #f4efe6;"></button>
+              <button class="color-swatch" data-color="#e2e8f0" title="모던 소프트 그레이" style="background: #e2e8f0;"></button>
+              <button class="color-swatch" data-color="#2d3748" title="다크 차콜 네이비" style="background: #2d3748;"></button>
+              <button class="color-swatch" data-color="#dce7e1" title="세이지 그린" style="background: #dce7e1;"></button>
+              <button class="color-swatch" data-color="#ebd8d0" title="테라코타 파스텔" style="background: #ebd8d0;"></button>
+              <button class="color-swatch" data-color="#1e293b" title="미드나잇 슬레이트" style="background: #1e293b;"></button>
+            </div>
+
+            <div class="finish-sub-options">
+              <label class="control-label">벽면 패턴</label>
+              <div class="select-wrapper">
+                <select id="wall-pattern-select">
+                  <option value="clean">클린 매트 (Clean Solid)</option>
+                  <option value="linen">소프트 린넨 (Textured Linen)</option>
+                  <option value="stripe">버티컬 스트라이프 (Pinstripe)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Wall Visibility Toggle -->
+            <div class="wall-toggle-row">
+              <label class="checkbox-container">
+                <input type="checkbox" id="chk-toggle-side-walls" checked>
+                <span class="checkmark"></span>
+                <span>좌/우 측면 벽면 표시</span>
+              </label>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tab 3 Content: Placed Items Layer List -->
+        <div id="tab-layers" class="tab-content">
+          <div class="layers-header">
+            <span class="layers-count">배치된 아이템 목록</span>
+            <button id="btn-select-none" class="btn-text-only">선택 해제</button>
+          </div>
+          <div class="layers-list" id="layers-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- 3D Canvas Viewport Container -->
+      <div class="viewport-container" id="canvas-container">
+        <!-- 3D Canvas will be injected here -->
+        
+        <!-- Viewport Quick Instructions Overlay -->
+        <div class="viewport-overlay-tips">
+          <span class="tip-badge">🖱️ 좌클릭+드래그: 회전</span>
+          <span class="tip-badge">🖱️ 우클릭+드래그: 화면 이동</span>
+          <span class="tip-badge">🎡 휠: 줌 인/아웃</span>
+          <span class="tip-badge">📦 가구 클릭+드래그: 위치 이동</span>
+          <span class="tip-badge">⌨️ R: 90° 회전 | Del: 삭제</span>
+        </div>
+
+        <!-- Floor Drag Hint (shows during dragging) -->
+        <div class="floor-drag-indicator" id="drag-indicator">
+          <span>바닥 평면 위 이동 중... [Shift: 0.25m 스냅]</span>
+        </div>
+      </div>
+
+      <!-- Right Floating Inspector Panel (Object Properties) -->
+      <aside class="inspector-panel glass-card" id="inspector-panel">
+        <div class="inspector-header">
+          <div class="inspector-title-group">
+            <span class="inspector-category-badge" id="insp-category">거실 가구</span>
+            <h2 class="inspector-item-title" id="insp-name">3인용 모던 소파</h2>
+          </div>
+          <button id="btn-close-inspector" class="btn-icon-close" title="선택 닫기">✕</button>
+        </div>
+
+        <div class="inspector-body">
+          <!-- Quick Action Buttons -->
+          <div class="inspector-quick-actions">
+            <button id="insp-btn-rotate-left" class="action-pill" title="반시계 45도 회전">
+              <span>↺ -45°</span>
+            </button>
+            <button id="insp-btn-rotate-right" class="action-pill" title="시계 45도 회전">
+              <span>↻ +45°</span>
+            </button>
+            <button id="insp-btn-center" class="action-pill" title="방 정중앙으로 이동">
+              <span>🎯 중앙</span>
+            </button>
+            <button id="insp-btn-duplicate" class="action-pill" title="아이템 복제">
+              <span>📋 복제</span>
+            </button>
+          </div>
+
+          <!-- Position Transform Controls -->
+          <div class="control-group">
+            <div class="group-header">
+              <span class="group-title">위치 좌표 (Position)</span>
+              <span class="unit-indicator">단위: m</span>
+            </div>
+            
+            <div class="slider-field">
+              <div class="slider-meta">
+                <span class="axis-badge axis-x">X 가로</span>
+                <span class="field-val" id="val-pos-x">0.00m</span>
+              </div>
+              <input type="range" id="slider-pos-x" min="-4.2" max="4.2" step="0.05" value="0">
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-meta">
+                <span class="axis-badge axis-z">Z 세로</span>
+                <span class="field-val" id="val-pos-z">0.00m</span>
+              </div>
+              <input type="range" id="slider-pos-z" min="-3.2" max="3.2" step="0.05" value="0">
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-meta">
+                <span class="axis-badge axis-y">Y 높이 (바닥 띄우기)</span>
+                <span class="field-val" id="val-pos-y">0.00m</span>
+              </div>
+              <input type="range" id="slider-pos-y" min="0" max="2.0" step="0.02" value="0">
+            </div>
+          </div>
+
+          <!-- Rotation & Scale Controls -->
+          <div class="control-group">
+            <div class="group-header">
+              <span class="group-title">회전 & 크기 (Rotation & Scale)</span>
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-meta">
+                <span>회전 각도 (Y Rotation)</span>
+                <span class="field-val" id="val-rot-y">0°</span>
+              </div>
+              <input type="range" id="slider-rot-y" min="0" max="360" step="1" value="0">
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-meta">
+                <span>크기 배율 (Scale)</span>
+                <span class="field-val" id="val-scale">1.00x</span>
+              </div>
+              <input type="range" id="slider-scale" min="0.5" max="2.0" step="0.05" value="1">
+            </div>
+          </div>
+
+          <!-- Color Customizer for Selected Item -->
+          <div class="control-group">
+            <div class="group-header">
+              <span class="group-title">패브릭 / 본체 색상 커스텀</span>
+            </div>
+            <div class="furniture-color-palette" id="insp-color-palette">
+              <button class="color-dot" data-color="#475569" title="다크 슬레이트" style="background:#475569;"></button>
+              <button class="color-dot" data-color="#3b82f6" title="클래식 블루" style="background:#3b82f6;"></button>
+              <button class="color-dot" data-color="#059669" title="보태니컬 에메랄드" style="background:#059669;"></button>
+              <button class="color-dot" data-color="#d97706" title="웜 오커 카멜" style="background:#d97706;"></button>
+              <button class="color-dot" data-color="#dc2626" title="딥 루비 레드" style="background:#dc2626;"></button>
+              <button class="color-dot" data-color="#f8fafc" title="아이보리 화이트" style="background:#f8fafc;"></button>
+            </div>
+          </div>
+
+          <!-- Danger Zone (Delete) -->
+          <div class="inspector-footer">
+            <button id="insp-btn-delete" class="btn-delete-full">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>선택 가구 삭제 (Delete)</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Floating Notification Toast -->
+    <div id="toast" class="toast-notification"></div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
