@@ -1135,7 +1135,207 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ==========================================================================
-   6. Responsive Adaptations
+   6. Floorplan & Structure Customizer Styles (NEW)
+   ========================================================================== */
+
+/* Preset Dropdown */
+.preset-dropdown {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg-glass-input);
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.preset-dropdown option {
+  background: #0f172a;
+  color: #fff;
+  padding: 8px;
+}
+
+/* Room Focus Pills */
+.room-focus-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.room-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.room-pill {
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.room-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: var(--border-glass-hover);
+}
+
+.room-pill.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+/* Segmented Control (Wall Height) */
+.segmented-control {
+  display: flex;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 4px;
+}
+
+.segment-btn {
+  flex: 1;
+  padding: 7px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.segment-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.segment-btn.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px var(--accent-glow);
+}
+
+/* Blueprint Upload Box */
+.blueprint-upload-box {
+  border: 2px dashed rgba(99, 102, 241, 0.4);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  text-align: center;
+  background: rgba(99, 102, 241, 0.06);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.blueprint-upload-box:hover {
+  border-color: var(--accent-primary);
+  background: rgba(99, 102, 241, 0.12);
+  transform: translateY(-1px);
+}
+
+.upload-box-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.upload-box-content svg {
+  stroke: #818cf8;
+}
+
+.upload-box-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.upload-box-subtitle {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.blueprint-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* 3D Room Floating Tags in Scene */
+.room-3d-tag {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 4px 9px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 15;
+  transition: opacity var(--transition-fast);
+}
+
+.room-3d-tag .dim-sub {
+  font-size: 9px;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Furniture Scale Bar */
+.furniture-scale-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 10px;
+}
+
+.scale-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scale-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.scale-val {
+  font-size: 10px;
+  font-weight: 600;
+  color: #818cf8;
+}
+
+/* ==========================================================================
+   7. Responsive Adaptations
    ========================================================================== */
 @media (max-width: 900px) {
   .sidebar-panel {
@@ -1149,3 +1349,4 @@ input[type="range"]::-webkit-slider-thumb:hover {
     display: none;
   }
 }
+
